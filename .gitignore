@@ -1,0 +1,10 @@
+# Ignore heavy models (Send these via USB/Discord instead)
+
+
+# Ignore environment & build junk
+venv/
+.env
+__pycache__/
+build/
+.dart_tool/
+ios/.symlinks/
