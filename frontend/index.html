@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuro Guard | AI Mental Health Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+    </div>
+
+    <!-- History Drawer Overlay -->
+    <div id="historyOverlay" class="history-overlay" onclick="toggleHistory()"></div>
+
+    <!-- History Drawer -->
+    <aside id="historyPanel" class="history-panel">
+        <div class="history-header">
+            <div class="history-title">
+                <i class="ph ph-clock-counter-clockwise"></i>
+                <span>Analysis History</span>
+            </div>
+            <button class="history-close-btn" onclick="toggleHistory()">
+                <i class="ph ph-x"></i>
+            </button>
+        </div>
+        <div id="historyList" class="history-list">
+            <div class="history-loading">
+                <i class="ph ph-circle-notch loading-spin"></i>
+                Loading history...
+            </div>
+        </div>
+    </aside>
+
+    <main class="container">
+        <div class="glass-card">
+            <header class="card-header">
+                <div class="header-left">
+                    <i class="ph ph-shield-check neon-icon"></i>
+                    <h1 class="neon-text">Neuro Guard</h1>
+                </div>
+                <button class="history-btn" onclick="toggleHistory()" title="View History">
+                    <i class="ph ph-clock-counter-clockwise"></i>
+                    <span>History</span>
+                </button>
+            </header>
+            
+            <p class="subtitle">Express your thoughts freely. Our AI will analyze your mental state and provide support.</p>
+
+            <div class="input-group">
+                <textarea id="userInput" placeholder="How are you feeling today? e.g., 'I am feeling overwhelmed with my assignments...'"></textarea>
+            </div>
+            
+            <button id="analyzeBtn" onclick="analyzeMood()">
+                <span class="btn-text">Analyze Mental State</span>
+                <i class="ph ph-sparkle"></i>
+                <div class="spinner" id="btnSpinner"></div>
+            </button>
+
+            <div id="resultArea" class="result-area">
+                <div class="result-header">
+                    <span class="result-label">ANALYSIS RESULT</span>
+                </div>
+                
+                <div class="result-content">
+                    <div class="prediction-box">
+                        <i class="ph ph-brain" id="statusIcon"></i>
+                        <h2 id="predictionText">---</h2>
+                    </div>
+                    
+                    <div class="confidence-bar-container">
+                        <div class="confidence-header">
+                            <span>Confidence Score</span>
+                            <span id="confidenceText">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="confidenceFill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="top-predictions-section" id="topPredictionsSection">
+                    <div class="top-predictions-label">TOP 3 PREDICTIONS</div>
+                    <div id="topPredictionsList" class="top-predictions-list"></div>
+                </div>
+
+                <!-- AI Wellness Tip -->
+                <div id="wellnessTipCard" class="wellness-tip-card">
+                    <div class="wellness-tip-header">
+                        <i class="ph ph-sparkle"></i>
+                        <span>AI Wellness Tip</span>
+                    </div>
+                    <p id="wellnessTipText" class="wellness-tip-text"></p>
+                </div>
+                
+                <div id="emergencyAlert" class="emergency-alert">
+                    <i class="ph ph-warning-circle"></i>
+                    <div class="alert-content">
+                        <strong>High-risk signal detected.</strong>
+                        <p>Immediate support is available. Please reach out to a professional or Helpline: <strong>iCall 9152987821</strong></p>
+                    </div>
+                </div>
+                
+                <div id="errorAlert" class="error-alert">
+                    <i class="ph ph-warning-circle"></i>
+                    <span>Could not connect to the server. Please check your terminal!</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

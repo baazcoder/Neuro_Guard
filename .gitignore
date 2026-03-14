@@ -1,5 +1,11 @@
 # Ignore heavy models (Send these via USB/Discord instead)
+# Environments
+.env
+langchain_env/
+__pycache__/
 
+# Databases
+neuro_guard.db
 
 # Ignore environment & build junk
 venv/
