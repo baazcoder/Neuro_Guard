@@ -1,70 +1,123 @@
-Based on your current folder structure and the logic we've built for your Neuro Guard project, here is a professional README.md tailored for a B.Tech CSE project submission.
+# Neuro Guard
 
-It highlights your use of Hybrid AI and the Gemini API, which will look great to your evaluators at LPU.
+An AI-powered mental health analyzer that uses machine learning to assess mental states from text input and provides personalized wellness tips.
 
-Neuro Guard: AI-Powered Mental Health Assistant 🧠🛡️
-Neuro Guard is a full-stack mental health analysis platform designed to detect emotional states and provide immediate support. It uses a hybrid approach, combining a custom-trained Bi-LSTM deep learning model with the Google Gemini Pro API for wellness advice and crisis intervention.
+## Features
 
-🚀 Key Features
-Hybrid Analysis: Uses Deep Learning (TensorFlow) for initial classification and Gemini AI for contextual "Sense-Check" and wellness tips.
+- **Mental State Analysis**: Analyzes text input to predict mental states including Anxiety, Depression, Stress, Bipolar, Personality Disorder, and more
+- **AI-Powered Tips**: Generates personalized wellness tips using Google's Gemini AI
+- **Emergency Detection**: Identifies high-risk situations and provides appropriate resources
+- **Analysis History**: Stores and displays previous analyses for tracking progress
+- **Modern UI**: Clean, glass-morphism design with responsive interface
 
-Emergency Heuristics: A safety layer that triggers an immediate LPU Helpline Modal if suicidal ideation or high-risk crisis is detected.
+## Tech Stack
 
-Midnight Purple UI: A sleek, responsive frontend built with a modern aesthetic and Phospor icons.
+### Backend
+- **FastAPI**: High-performance web framework
+- **TensorFlow/Keras**: Machine learning model for mental state prediction
+- **Google Gemini AI**: For generating personalized wellness tips
+- **SQLAlchemy**: Database ORM for storing analysis history
+- **SQLite**: Local database for data persistence
 
-History Persistence: Integrated SQLite database (via SQLAlchemy) to track mood history and progress over time.
+### Frontend
+- **HTML5/CSS3**: Modern web technologies
+- **JavaScript**: Interactive functionality
+- **Phosphor Icons**: Beautiful icon library
 
-Real-time Feedback: Interactive progress bars and confidence scores for every analysis.
+## Installation
 
-🛠️ Technology Stack
-Frontend: HTML5, CSS3, JavaScript (ES6+), Phosphor Icons.
+1. **Clone the repository**:
+   ```bash
+   git clone <repository-url>
+   cd Neuro_Guard
+   ```
 
-Backend: FastAPI (Python), Uvicorn.
+2. **Install Python dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Machine Learning: TensorFlow, Keras (Bi-LSTM Model), Scikit-learn (Tokenizer).
+3. **Set up environment variables**:
+   Create a `.env` file in the root directory and add your Gemini API key:
+   ```
+   GEMINI_API_KEY=your_gemini_api_key_here
+   ```
 
-AI Integration: Google Gemini Pro API.
+4. **Download model files**:
+   Ensure the following files are present in the `backend/` directory:
+   - `student.h5` (TensorFlow model)
+   - `tokenizer.pkl` (text tokenizer)
 
-Database: SQLite with SQLAlchemy ORM.
+## Usage
 
-📂 Project Structure
-Plaintext
+### Starting the Server
+
+**Windows**:
+Double-click `START_SERVER.bat` or run:
+```bash
+uvicorn backend.main:app --port 8000 --reload
+```
+
+**Linux/Mac**:
+```bash
+uvicorn backend.main:app --port 8000 --reload
+```
+
+### Accessing the Application
+
+Open your web browser and navigate to: `http://localhost:8000`
+
+The application will serve both the backend API and frontend interface.
+
+## How It Works
+
+1. **Text Analysis**: User inputs text describing their current mental state or situation
+2. **ML Prediction**: TensorFlow model analyzes the text and predicts the most likely mental state
+3. **AI Tips**: Google Gemini generates personalized, context-specific wellness advice
+4. **Emergency Handling**: High-risk predictions trigger appropriate support resources
+5. **History Tracking**: All analyses are stored locally for progress monitoring
+
+## Mental States Detected
+
+- Anxiety
+- Normal
+- Depression
+- Suicidal
+- Stress
+- Bipolar
+- Personality Disorder
+
+## Emergency Resources
+
+For critical situations, the app provides immediate access to:
+- iCall: 9152987821
+- Vandrevala Foundation: 1860-2662-345
+
+## Development
+
+### Project Structure
+```
 Neuro_Guard/
 ├── backend/
-│   ├── main.py            # FastAPI Application & ML Logic
-│   ├── student.h5         # Trained Bi-LSTM Model
-│   ├── tokenizer.pkl      # Pickled Tokenizer
-│   └── mental_health.db   # SQLite Database (Auto-generated)
+│   ├── main.py              # FastAPI application
+│   ├── student.h5           # Trained ML model
+│   ├── tokenizer.pkl        # Text tokenizer
+│   └── hackathon_model.ipynb # Model training notebook
 ├── frontend/
-│   ├── index.html         # Main UI
-│   ├── style.css          # Midnight Purple Theme
-│   └── script.js          # Frontend Logic & API Integration
-├── requirements.txt       # Project Dependencies
-└── .env                   # API Keys (Local Only)
-⚙️ Installation & Setup
-1. Clone the Repository
-Bash
-git clone https://github.com/baazcoder/Neuro_Guard.git
-cd Neuro_Guard
-2. Install Dependencies
-Bash
-pip install -r requirements.txt
-3. Set Up API Key
-Create a .env file in the root directory and add your Gemini API Key:
+│   ├── index.html           # Main interface
+│   ├── style.css            # Styling
+│   └── script.js            # Frontend logic
+├── requirements.txt         # Python dependencies
+├── START_SERVER.bat         # Windows startup script
+└── README.md               # This file
+```
 
-Plaintext
-GEMINI_API_KEY=your_key_here
-4. Run Locally
-Bash
-python -m uvicorn backend.main:app --reload
-The app will be available at http://127.0.0.1:8000.
+### Adding New Features
+- Frontend components can be modified in the `frontend/` directory
+- Model retraining can be done using `hackathon_model.ipynb`
 
-☁️ Deployment
-This project is optimized for deployment on Render.
 
-Build Command: pip install -r requirements.txt
 
-Start Command: uvicorn backend.main:app --host 0.0.0.0 --port 10000
+## Disclaimer
 
-🛡️ Disclaimer
-This application is a student project for educational purposes and is not a substitute for professional medical advice, diagnosis, or treatment.
+This application is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of qualified health providers with questions about mental health conditions.
