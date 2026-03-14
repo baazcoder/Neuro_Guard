@@ -1,4 +1,8 @@
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Hide TF warnings
+os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true' # Prevent memory hogging
+
+import os
 import pickle
 import numpy as np
 from datetime import datetime
@@ -25,6 +29,17 @@ MODEL_PATH = os.path.join(BASE_DIR, "student.h5")
 TOKENIZER_PATH = os.path.join(BASE_DIR, "tokenizer.pkl")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Load model here
+    global model, tokenizer
+    model = load_model(MODEL_PATH, compile=False) # compile=False saves RAM
+    yield
+
+
+
 # --- Gemini Setup (Fixed SDK) ---
 gemini_model = None
 try:
@@ -38,7 +53,7 @@ except Exception as e:
     print(f"⚠️ Gemini initialization failed: {e}")
 
 # --- FastAPI App ---
-app = FastAPI(title="Neuro Guard")
+app = FastAPI(title="Neuro Guard",lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
