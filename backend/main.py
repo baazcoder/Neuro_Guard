@@ -42,7 +42,8 @@ app = FastAPI(title="Neuro Guard")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"], # For testing, allow all. For production, put your frontend URL.
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
