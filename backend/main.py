@@ -21,6 +21,20 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import uvicorn
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Load model here
+    global model, tokenizer
+    model = load_model(MODEL_PATH, compile=False) # compile=False saves RAM
+    yield
+app = FastAPI(title="Neuro Guard",lifespan=lifespan)
+
+# Go up one level (..) to find the frontend folder from the backend folder
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "frontend"))
+
+app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+
 # --- Configuration ---
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -31,12 +45,6 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
 from contextlib import asynccontextmanager
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Load model here
-    global model, tokenizer
-    model = load_model(MODEL_PATH, compile=False) # compile=False saves RAM
-    yield
 
 
 
@@ -53,7 +61,7 @@ except Exception as e:
     print(f"⚠️ Gemini initialization failed: {e}")
 
 # --- FastAPI App ---
-app = FastAPI(title="Neuro Guard",lifespan=lifespan)
+
 
 app.add_middleware(
     CORSMiddleware,
