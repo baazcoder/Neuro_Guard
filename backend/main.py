@@ -15,6 +15,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean, D
 from sqlalchemy.ext.declarative import declarative_base
 import google.generativeai as genai
 from dotenv import load_dotenv
+import uvicorn
 
 # --- Configuration ---
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
@@ -30,7 +31,7 @@ try:
     if GEMINI_API_KEY:
         genai.configure(api_key=GEMINI_API_KEY)
         gemini_model = genai.GenerativeModel("gemini-2.5-flash")
-        print("✅ Gemini AI Loaded.")
+        print("✅ Gemini AI Loaded (gemini-2.5-flash).")
     else:
         print("⚠️ No Gemini API key found. Using fallback messages.")
 except Exception as e:
@@ -95,21 +96,27 @@ async def get_wellness_tip(text: str, label: str) -> str:
         try:
             prompt = f"""A user wrote: "{text}". Mental state: {label}. Write a short wellness tip (2-3 sentences) specific to what they mentioned. Be warm and direct."""
             response = gemini_model.generate_content(prompt)
-            return response.text.strip()
+            if response and response.text:
+                return response.text.strip()
         except Exception as e:
-            print(f"[WellnessTip Error]: {e}")
+            print(f"[WellnessTip Error] Failed to get Gemini response: {type(e).__name__}: {e}")
+    else:
+        print("[WellnessTip] Gemini model not initialized, using fallback")
     return FALLBACK_TIPS.get(label, FALLBACK_TIPS["Normal"])
 
 async def correct_prediction_with_gemini(text: str, model_label: str) -> str:
-    if not gemini_model: return model_label
+    if not gemini_model: 
+        print("[Correction] Gemini model not available, returning original label")
+        return model_label
     try:
         prompt = f"""User text: "{text}". Predicted: {model_label}. Verify and return EXACTLY one label: Anxiety, Normal, Depression, Suicidal, Stress, Bipolar, Personality disorder. Respond with ONLY the label."""
         response = gemini_model.generate_content(prompt)
-        corrected = response.text.strip().replace(".", "")
-        if corrected in VALID_LABELS:
-            return corrected
+        if response and response.text:
+            corrected = response.text.strip().replace(".", "")
+            if corrected in VALID_LABELS:
+                return corrected
     except Exception as e:
-        print(f"[Correction Error]: {e}")
+        print(f"[Correction Error] Failed to correct with Gemini: {type(e).__name__}: {e}")
     return model_label
 
 @app.on_event("startup")
@@ -195,3 +202,6 @@ def get_entries(db: Session = Depends(get_db)):
     return [{"id": e.id, "text": e.text, "predicted_class": e.predicted_class, "confidence": e.confidence, "emergency_trigger": e.emergency_trigger, "timestamp": e.timestamp.isoformat() if e.timestamp else None} for e in entries]
 
 app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000, log_level="info")

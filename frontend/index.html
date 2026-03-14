@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,111 +11,208 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="background-elements">
-        <div class="blob-1"></div>
-        <div class="blob-2"></div>
-    </div>
-
-    <!-- History Drawer Overlay -->
-    <div id="historyOverlay" class="history-overlay" onclick="toggleHistory()"></div>
-
-    <!-- History Drawer -->
-    <aside id="historyPanel" class="history-panel">
-        <div class="history-header">
-            <div class="history-title">
-                <i class="ph ph-clock-counter-clockwise"></i>
-                <span>Analysis History</span>
-            </div>
-            <button class="history-close-btn" onclick="toggleHistory()">
+    <!-- LPU Helpline Modal -->
+    <div id="helplineModal" class="helpline-modal">
+        <div class="helpline-overlay" onclick="closeLpuHelpline()"></div>
+        <div class="helpline-content">
+            <button class="helpline-close" onclick="closeLpuHelpline()">
                 <i class="ph ph-x"></i>
             </button>
-        </div>
-        <div id="historyList" class="history-list">
-            <div class="history-loading">
-                <i class="ph ph-circle-notch loading-spin"></i>
-                Loading history...
+            <div class="helpline-icon">
+                <i class="ph ph-phone"></i>
+            </div>
+            <h2>We're Here For You</h2>
+            <p class="helpline-subtitle">You're in a critical situation. Please reach out immediately.</p>
+
+            <div class="helpline-section">
+                <h3>LPU Student Counseling Center</h3>
+                <div class="helpline-number">
+                    <span class="number">+91-1824-502911</span>
+                    <button class="copy-btn" onclick="copyNumber('+91-1824-502911')">
+                        <i class="ph ph-copy"></i>
+                    </button>
+                </div>
+                <p class="helpline-desc">Direct counseling support for LPU students. Available 24/7</p>
+            </div>
+
+            <div class="helpline-section">
+                <h3>Emergency Hotlines</h3>
+                <div class="helpline-number">
+                    <span class="number">iCall: 9152987821</span>
+                    <button class="copy-btn" onclick="copyNumber('9152987821')">
+                        <i class="ph ph-copy"></i>
+                    </button>
+                </div>
+                <div class="helpline-number">
+                    <span class="number">AASRA: 9820466726</span>
+                    <button class="copy-btn" onclick="copyNumber('9820466726')">
+                        <i class="ph ph-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="helpline-section">
+                <h3>
+                    <i class="ph ph-map-pin"></i>
+                    Nearby Counselors
+                </h3>
+                <div id="counselorsList" class="counselors-list">
+                    <p class="loading-counselors"><i class="ph ph-circle-notch loading-spin"></i> Finding counselors
+                        near you...</p>
+                </div>
+            </div>
+
+            <div class="helpline-footer">
+                <p><strong>Important:</strong> Talking to someone can help. Reach out now. Your life matters.</p>
+                <button class="acknowledge-btn" onclick="closeLpuHelpline()">I Understand, Thank You</button>
             </div>
         </div>
-    </aside>
+    </div>
 
-    <main class="container">
-        <div class="glass-card">
-            <header class="card-header">
-                <div class="header-left">
-                    <i class="ph ph-shield-check neon-icon"></i>
-                    <h1 class="neon-text">Neuro Guard</h1>
-                </div>
-                <button class="history-btn" onclick="toggleHistory()" title="View History">
-                    <i class="ph ph-clock-counter-clockwise"></i>
-                    <span>History</span>
+    <!-- Main Layout wrapper -->
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="new-chat-btn" onclick="resetChat()">
+                    <i class="ph ph-plus"></i>
+                    <span>New Analysis</span>
                 </button>
-            </header>
-            
-            <p class="subtitle">Express your thoughts freely. Our AI will analyze your mental state and provide support.</p>
-
-            <div class="input-group">
-                <textarea id="userInput" placeholder="How are you feeling today? e.g., 'I am feeling overwhelmed with my assignments...'"></textarea>
             </div>
-            
-            <button id="analyzeBtn" onclick="analyzeMood()">
-                <span class="btn-text">Analyze Mental State</span>
-                <i class="ph ph-sparkle"></i>
-                <div class="spinner" id="btnSpinner"></div>
-            </button>
 
-            <div id="resultArea" class="result-area">
-                <div class="result-header">
-                    <span class="result-label">ANALYSIS RESULT</span>
-                </div>
-                
-                <div class="result-content">
-                    <div class="prediction-box">
-                        <i class="ph ph-brain" id="statusIcon"></i>
-                        <h2 id="predictionText">---</h2>
+            <div class="history-list-container">
+                <div class="sidebar-section-title">Recent Analyses</div>
+                <div id="historyList" class="history-list">
+                    <div class="history-loading">
+                        <i class="ph ph-circle-notch loading-spin"></i>
+                        Loading...
                     </div>
-                    
-                    <div class="confidence-bar-container">
-                        <div class="confidence-header">
-                            <span>Confidence Score</span>
-                            <span id="confidenceText">0%</span>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-wrapper">
+            <!-- Navbar -->
+            <nav class="navbar">
+                <div class="nav-left">
+                    <button class="menu-btn" onclick="toggleSidebar()">
+                        <i class="ph ph-list"></i>
+                    </button>
+                    <span class="logo-text"><i class="ph ph-shield-check" style="color: var(--accent);"></i> Neuro Guard <span class="version-badge">AI Core</span></span>
+                </div>
+                <div class="nav-right">
+                    <div class="user-avatar">
+                        <i class="ph ph-user"></i>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main Chat Area -->
+            <main class="chat-area">
+                <div class="chat-container">
+
+                    <!-- Welcome Screen -->
+                    <div class="welcome-screen" id="welcomeScreen">
+                        <h1 class="greeting">Hello, student <span class="wave">👋</span></h1>
+                        <h2 class="sub-greeting">How are you feeling today?</h2>
+                        <div class="suggestion-cards">
+                            <button class="suggestion-card"
+                                onclick="document.getElementById('userInput').value = 'I am feeling overwhelmed with my assignments and exams...'; document.getElementById('userInput').focus();">
+                                <i class="ph ph-books"></i>
+                                <span>I am feeling overwhelmed with my assignments...</span>
+                            </button>
+                            <button class="suggestion-card"
+                                onclick="document.getElementById('userInput').value = 'I am having a hard time adjusting to college life and making friends.'; document.getElementById('userInput').focus();">
+                                <i class="ph ph-users"></i>
+                                <span>I'm having a hard time adjusting to college...</span>
+                            </button>
+                            <button class="suggestion-card"
+                                onclick="document.getElementById('userInput').value = 'I haven\'t been sleeping well and feel constantly tired.'; document.getElementById('userInput').focus();">
+                                <i class="ph ph-moon"></i>
+                                <span>I haven't been sleeping well and feel tired.</span>
+                            </button>
                         </div>
-                        <div class="progress-track">
-                            <div class="progress-fill" id="confidenceFill"></div>
+                    </div>
+
+                    <!-- Result Area -->
+                    <div id="resultArea" class="result-area" style="display: none;">
+                        <div class="user-message-bubble">
+                            <div class="avatar-small"><i class="ph ph-user"></i></div>
+                            <div class="message-content" id="displayUserInput"></div>
+                        </div>
+
+                        <div class="ai-message-bubble">
+                            <div class="avatar-small ai"><i class="ph ph-shield-check"></i></div>
+                            <div class="message-content">
+                                <div class="result-content">
+                                    <div class="prediction-box">
+                                        <i class="ph ph-brain" id="statusIcon"></i>
+                                        <div>
+                                            <div class="result-label">ANALYSIS RESULT</div>
+                                            <h2 id="predictionText">---</h2>
+                                            <div class="confidence-inline">
+                                                Confidence: <span id="confidenceText">0%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="progress-track">
+                                        <div class="progress-fill" id="confidenceFill"></div>
+                                    </div>
+                                </div>
+
+                                <div class="top-predictions-section" id="topPredictionsSection">
+                                    <div class="top-predictions-label">TOP 3 ALTERNATIVE PREDICTIONS</div>
+                                    <div id="topPredictionsList" class="top-predictions-list"></div>
+                                </div>
+
+                                <!-- AI Wellness Tip -->
+                                <div id="wellnessTipCard" class="wellness-tip-card">
+                                    <div class="wellness-tip-header">
+                                        <i class="ph ph-sparkle"></i>
+                                        <span>AI Wellness Tip</span>
+                                    </div>
+                                    <p id="wellnessTipText" class="wellness-tip-text"></p>
+                                </div>
+
+                                <div id="emergencyAlert" class="emergency-alert">
+                                    <i class="ph ph-warning-circle"></i>
+                                    <div class="alert-content">
+                                        <strong>High-risk signal detected.</strong>
+                                        <p>Immediate support is available. Please reach out to a professional or
+                                            Helpline: <strong>iCall 9152987821</strong></p>
+                                    </div>
+                                </div>
+
+                                <div id="errorAlert" class="error-alert">
+                                    <i class="ph ph-warning-circle"></i>
+                                    <span>Could not connect to the server. Please check your terminal!</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="top-predictions-section" id="topPredictionsSection">
-                    <div class="top-predictions-label">TOP 3 PREDICTIONS</div>
-                    <div id="topPredictionsList" class="top-predictions-list"></div>
                 </div>
+            </main>
 
-                <!-- AI Wellness Tip -->
-                <div id="wellnessTipCard" class="wellness-tip-card">
-                    <div class="wellness-tip-header">
-                        <i class="ph ph-sparkle"></i>
-                        <span>AI Wellness Tip</span>
-                    </div>
-                    <p id="wellnessTipText" class="wellness-tip-text"></p>
+            <!-- Input Area -->
+            <div class="input-area-wrapper">
+                <div class="input-box">
+                    <textarea id="userInput" placeholder="Ask Neuro Guard..."></textarea>
+                    <button id="analyzeBtn" onclick="analyzeMood()">
+                        <div class="spinner" id="btnSpinner"></div>
+                        <i class="ph ph-arrow-up" id="sendIcon"></i>
+                    </button>
                 </div>
-                
-                <div id="emergencyAlert" class="emergency-alert">
-                    <i class="ph ph-warning-circle"></i>
-                    <div class="alert-content">
-                        <strong>High-risk signal detected.</strong>
-                        <p>Immediate support is available. Please reach out to a professional or Helpline: <strong>iCall 9152987821</strong></p>
-                    </div>
-                </div>
-                
-                <div id="errorAlert" class="error-alert">
-                    <i class="ph ph-warning-circle"></i>
-                    <span>Could not connect to the server. Please check your terminal!</span>
+                <div class="footer-note">
+                    Neuro Guard can make mistakes. Consider verifying important information or reaching out privately.
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>
